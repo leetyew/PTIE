@@ -1,0 +1,132 @@
+base_options:
+    # Multiple GPUs
+    multi_gpu: True
+    # Number of epochs
+    max_epochs: 10
+    # Activate or deactivate logging
+    log_bool: True
+    # Folder for logs
+    log_dir: 'logs/train/'
+    # Log every log_iter
+    log_iter: 100
+    # Val every val_epoch (if do_val_iter is True, then validate every val_iter)
+    val_epoch: 1
+    # Perform Validation on iteration (default is per epoch)
+    do_val_iter: True
+    # Val every val_iter
+    val_iter: 500
+    # Use k dimensional cross entropy loss
+    loss_k: True
+    
+loader_options:
+    batch_size: 640
+    shuffle: True
+    num_workers: 10
+    pin_memory: True
+    
+train_dataset_options:
+    # Train dataset name: MJSynthDataset, ICDAR2013Dataset, ICDAR2017Dataset
+    dataset_name: 'MjSynthv1_SynthTextv1_Dataset'
+    # TODO: Train, val, test, etc. Only Train and None(val+test) available for MJSynthDataset
+    dataset_type: '32by128'
+    op: 'ViT_dualPatches'
+    pad: False
+    GT_A: False
+    global_attn: True
+    im_width: 128
+    im_height: 32
+    augment: True
+    direction: 'bidirectional'
+    multiscale: False
+    as_augment: False
+    as_pad: False
+    
+val_dataset_options:
+    # Validation dataset name: MJSynthDataset, ICDAR2013Dataset, ICDAR2017Dataset
+    dataset_name: 'SynthDataset_Val_ViT'
+    # TODO: Train, val, test, etc. Only Train and Test available for ICDAR2013Dataset
+    dataset_type: '32by128'
+    pad: False
+    op: 'ViT_dualPatches'
+    finetune: 'False'
+    direction: 'bidirectional'
+    as_pad: False
+    
+test_dataset_options:
+    # Validation dataset name: MJSynthDataset, ICDAR2013Dataset, ICDAR2017Dataset
+    dataset_name: 'SynthDataset_Test_ViT'
+    # TODO: Train, val, test, etc. Only Train and Test available for ICDAR2013Dataset
+    dataset_type: 'Test'
+    op: 'ViT_dualPatches'    
+    pad: False
+    direction: 'bidirectional'  
+    im_width: 128
+    im_height: 32
+    
+model_options:
+    # Load pre-trained
+    load_pretrained: False
+    # .pth path of pretrained model
+    pretrained_path: 'logs/epoch_4_126456.pth'
+    # Model name
+    model_name: 'ViT_bidirectional_dualPatches_untie'
+    # Sequence length output from FCN
+    enc_seq_len: 128
+    # Maximum sequence length for text 
+    dec_seq_len: 30
+    # Padding index for nn.Embedding. (Empty means None in python)
+    padding_idx: 0
+    # Eps for layer norm (used in transformer)
+    norm_eps: 1.e-06
+    # Dropout rate
+    dec_dropout: 0.1
+    enc_dropout: 0.1
+    # Dimension for transformer decoder
+    enc_d_model: 512
+    # Number of encoder heads for transformer
+    encoder_heads: 16
+    # Number of encoder layers
+    encoder_layers: 6
+    # Dimension for feed forwardLOG_DIR layer in decoder
+    d_ff: 2048
+    # Dimension for transformer decoder
+    dec_d_model: 512
+    # Number of decoder heads for transformer
+    decoder_heads: 16
+    # Number of decoder layers
+    decoder_layers: 6
+    # Weights sharing between encoder and decoder embeddings
+    share_enc_dec_weights: False
+    # Weights sharing between output linear layer and decoder embedding layer
+    share_out_weights: True
+    ortho_emb: True
+    learnable_pe: False
+
+load_stats:
+    iter_step: 126456
+    start_epoch: 5
+    best_val_acc: 0.875
+    
+learning_options:
+    # Learning rate
+    learning_rate: 0.02
+    # Custom Scheduler
+    scheduler: 
+        do_custom: True
+        # Warmup steps NOTE THIS SHOULD BE 4000 
+        warmup_steps: 6000
+    # Custom masking strategy
+    masking: 
+        do_custom: False
+        # Base epoch for custom masking strategy
+        base_epoch: 1000
+    LM_iter_start: 1
+    LM_iter: 10
+    
+compare_options:
+    #weightage of guiding
+    lambda: 0.01
+    dist_func: 
+        - levenshtein    
+    
+    
