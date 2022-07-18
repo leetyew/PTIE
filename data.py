@@ -144,14 +144,11 @@ class MjSynthv1_SynthTextv1_Dataset(torch.utils.data.Dataset):
         with open('../ocr_T/data/meta_ST_MJ.txt', 'r') as f:
             self.meta = f.readlines()
             self.meta = [line.rstrip('\n') for line in self.meta]
-            import random
-            random.shuffle(self.meta)
-            self.meta = self.meta[:500000]
+
         self.transform = transform
         self.width = kwargs['im_width']
         self.height = kwargs['im_height']
         self.transform_resize = torchvision.transforms.Compose([torchvision.transforms.Resize((self.height,self.width))])
-        self.transform_resize_rect = torchvision.transforms.Compose([torchvision.transforms.Resize((64, 200))])
         self.op = kwargs['op']
         self.augment = kwargs['augment']
         if self.augment:
